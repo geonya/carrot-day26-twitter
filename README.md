@@ -1,42 +1,13 @@
-# Hello World example
+# carrot-day26-twitter
 
-## How to use
+After logging in, in the Home Page, the user should see all the Tweets on the database, the user should also be able to POST a Tweet.
 
-### Using `create-next-app`
+/tweet/[id]:
+The user should be able to see the tweet + a Like button.
 
-Execute [`create-next-app`](https://github.com/segmentio/create-next-app) with [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) or [npx](https://github.com/zkat/npx#readme) to bootstrap the example:
+When the Like button is pressed, save the like on the database and reflect the update using mutate from useSWR.
 
-```bash
-npx create-next-app --example hello-world hello-world-app
-# or
-yarn create next-app --example hello-world hello-world-app
-```
-
-### Download manually
-
-Download the example:
-
-```bash
-curl https://codeload.github.com/zeit/next.js/tar.gz/canary | tar -xz --strip=2 next.js-canary/examples/hello-world
-cd hello-world
-```
-
-Install it and run:
-
-```bash
-npm install
-npm run dev
-# or
-yarn
-yarn dev
-```
-
-Deploy it to the cloud with [now](https://zeit.co/now) ([download](https://zeit.co/download))
-
-```bash
-now
-```
-
-## The idea behind the example
-
-This example shows the most basic idea behind Next. We have 2 pages: `pages/index.js` and `pages/about.js`. The former responds to `/` requests and the latter to `/about`. Using `next/link` you can add hyperlinks between them with universal routing capabilities. The `day` directory shows that you can have subdirectories.
+참고사항
+Prisma is configured in the blueprint with SQLite.
+When you modify your prisma.schema run npm run db-sync.
+SWR and Tailwind are also configured in the blueprint.

@@ -1,5 +1,5 @@
 {
-  "name": "nextjs-prisma-typescript-tailwind-blueprint",
+  "name": "carrot-day26-twitter",
   "version": "1.0.0",
   "scripts": {
     "dev": "next",
