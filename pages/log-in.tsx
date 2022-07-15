@@ -1,6 +1,8 @@
+import useMutation from '@libs/client/useMutation';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import AuthLayout from '../components/auth-layout';
 
@@ -8,16 +10,33 @@ interface CreateAccountForm {
   username: string;
   password: string;
 }
+interface LoginResponse {
+  ok: boolean;
+  error?: string;
+}
 const LogIn: NextPage = () => {
   const router = useRouter();
+  const [loginMutation, { data, loading }] =
+    useMutation<LoginResponse>('/api/users/log-in');
   const { register, handleSubmit } = useForm<CreateAccountForm>({
     defaultValues: {
       username: router.query?.username ? (router.query.username as string) : '',
       password: router.query?.password ? (router.query.password as string) : '',
     },
   });
+  const onValid = (data: CreateAccountForm) => {
+    if (loading) return;
+    loginMutation({
+      ...data,
+    });
+  };
+  useEffect(() => {
+    if (data?.ok) {
+      router.push('/');
+    }
+  }, [data, router]);
   return (
-    <AuthLayout>
+    <AuthLayout pageTitle='Log In'>
       <div className='space-y-14'>
         <div>
           <svg viewBox='0 0 24 24' className='fill-white w-14'>
@@ -31,7 +50,10 @@ const LogIn: NextPage = () => {
           오늘 당근 🥕 트위터에 가입하세요.
         </h4>
       </div>
-      <form className='mt-9 flex flex-col w-full space-y-3 text-slate-500'>
+      <form
+        className='mt-9 flex flex-col w-full space-y-3 text-black'
+        onSubmit={handleSubmit(onValid)}
+      >
         <input
           className='w-3/5 px-5 py-2 rounded-full'
           type='text'
@@ -42,7 +64,8 @@ const LogIn: NextPage = () => {
           className='w-3/5 px-5 py-2 rounded-full'
           type='password'
           {...register('password', { required: 'Please Write password' })}
-          placeholder='Password'
+          name='Password'
+          autoComplete='on'
         />
         <input
           className='w-3/5 px-5 py-2 rounded-full bg-blue-500 text-white cursor-pointer'

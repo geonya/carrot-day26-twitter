@@ -1,4 +1,4 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(req: NextRequest) {
   if (!req.url.includes('/api')) {
@@ -7,7 +7,12 @@ export function middleware(req: NextRequest) {
       !req.url.includes('/create-account') &&
       !req.cookies.tweetsession
     ) {
-      console.log('not allowed user');
+      return NextResponse.redirect(new URL('/log-in', req.url));
+    }
+    if (req.url.includes('/log-in') || req.url.includes('/create-account')) {
+      if (req.cookies.tweetsession) {
+        return NextResponse.redirect(new URL('/', req.url));
+      }
     }
   }
 }

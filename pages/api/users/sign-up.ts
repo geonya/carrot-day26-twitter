@@ -9,10 +9,6 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<MutationResponseType>
 ) {
-  if (req.method === 'GET') {
-    const users = await client.user.findMany({});
-    return res.json({ ok: true, users });
-  }
   if (req.method === 'POST') {
     try {
       const {
@@ -20,7 +16,7 @@ async function handler(
       } = req;
       const existingUser = await client.user.findFirst({
         where: {
-          OR: [{ username, email }],
+          OR: [{ username }, { email }],
         },
       });
       if (existingUser) {
@@ -46,5 +42,5 @@ async function handler(
 }
 
 export default withApiSession(
-  withHandler({ methods: ['GET', 'POST'], handler, isPrivate: false })
+  withHandler({ methods: ['POST'], handler, isPrivate: false })
 );

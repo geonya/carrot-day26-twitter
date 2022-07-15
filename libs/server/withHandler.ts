@@ -4,7 +4,7 @@ type Method = 'GET' | 'POST' | 'DELETE';
 
 interface ConfigType {
   methods: Method[];
-  handler: (req: NextApiRequest, res: NextApiResponse) => void;
+  handler: (req: NextApiRequest, res: NextApiResponse) => Promise<void>;
   isPrivate?: boolean;
 }
 
@@ -24,7 +24,7 @@ export default function withHandler({
       return res.status(401).json({ ok: false, error: 'Login Please!' });
     }
     try {
-      handler(req, res);
+      await handler(req, res);
     } catch (error) {
       console.error(error);
       return res.status(500).json({ error });

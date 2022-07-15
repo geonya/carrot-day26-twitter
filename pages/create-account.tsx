@@ -19,7 +19,7 @@ interface CreateAccountResponse {
 const CreateAccount: NextPage = () => {
   const router = useRouter();
   const [createAccount, { data, loading }] =
-    useMutation<CreateAccountResponse>('/api/users');
+    useMutation<CreateAccountResponse>('/api/users/sign-up');
   const { register, handleSubmit, getValues } = useForm<CreateAccountForm>();
   const onValid = (data: CreateAccountForm) => {
     if (loading) return;
@@ -35,9 +35,12 @@ const CreateAccount: NextPage = () => {
         },
       });
     }
+    if (data?.error) {
+      alert(data.error);
+    }
   }, [data, router]);
   return (
-    <AuthLayout>
+    <AuthLayout pageTitle='Sign Up'>
       <div className='space-y-14'>
         <div>
           <svg viewBox='0 0 24 24' className='fill-white w-14'>
@@ -46,10 +49,10 @@ const CreateAccount: NextPage = () => {
             </g>
           </svg>
         </div>
-        <h1 className='text-6xl font-bold'>지금 가입하세요</h1>
+        <h1 className='text-5xl font-bold'>지금 가입하세요.</h1>
       </div>
       <form
-        className='mt-9 flex flex-col w-full space-y-3 text-slate-500'
+        className='mt-9 flex flex-col w-full space-y-3 text-black'
         onSubmit={handleSubmit(onValid)}
       >
         <input
