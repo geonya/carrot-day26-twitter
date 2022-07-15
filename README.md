@@ -1,5 +1,12 @@
 # carrot-day26-twitter
 
+이때까지 배운 것을 토대로, 미니 트위터 클론을 완성합니다.
+NextJS, Prisma, Tailwind, API Routes 그리고 SWR 를 활용하여 아래 페이지를 완성합니다.
+/: Logged In ? Home Page otherwise redirect to Create Account / Log in
+/create-account: Create Account
+/log-in: Log In
+/tweet/[id]: See one Tweet
+/:
 After logging in, in the Home Page, the user should see all the Tweets on the database, the user should also be able to POST a Tweet.
 
 /tweet/[id]:
