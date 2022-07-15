@@ -1,7 +1,7 @@
 import { Tweet } from '@prisma/client';
 import { NextPage } from 'next';
 import useSWR, { SWRConfig } from 'swr';
-import client from '../lib/server/client';
+import client from '@libs/server/client';
 
 interface TweetResponse {
   ok: boolean;
