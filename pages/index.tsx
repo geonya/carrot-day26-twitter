@@ -24,7 +24,7 @@ interface TweetFormValue {
 }
 
 const Main: NextPage = () => {
-  const { data, mutate } = useSWR<GetTweetsResponse>('/api/tweets');
+  const { data } = useSWR<GetTweetsResponse>('/api/tweets');
   const { myProfile } = useMe();
   const { register, handleSubmit, reset } = useForm<TweetFormValue>({
     mode: 'onChange',
