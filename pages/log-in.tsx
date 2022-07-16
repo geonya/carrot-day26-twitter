@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import AuthLayout from '../components/auth-layout';
+import AuthLayout from '@components/Auth-layout';
 
 interface CreateAccountForm {
   username: string;
@@ -70,7 +70,7 @@ const LogIn: NextPage = () => {
         <input
           className='w-3/5 px-5 py-2 rounded-full bg-blue-500 text-white cursor-pointer'
           type='submit'
-          value='로그인'
+          value={loading ? 'Loading...' : '로그인'}
         />
       </form>
       <div className='w-full mt-10 space-y-5'>

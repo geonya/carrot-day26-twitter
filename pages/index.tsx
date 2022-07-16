@@ -1,8 +1,7 @@
-import { Tweet, User } from '@prisma/client';
+import { Tweet } from '@prisma/client';
 import { NextPage } from 'next';
 import useSWR, { SWRConfig, useSWRConfig } from 'swr';
-import Layout from '@components/layout';
-import Image from 'next/image';
+import Layout from '@components/Layout';
 import useMe from '@libs/client/useMe';
 import { useForm } from 'react-hook-form';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -10,10 +9,11 @@ import useMutation from '@libs/client/useMutation';
 import client from '@libs/server/client';
 import axios from 'axios';
 import { BUCKET_URL } from 'constant';
-
-interface ITweet extends Tweet {
-  user?: User;
-}
+import TweetBox from '@components/TweetBox';
+import Avatar from '@components/Avatar';
+import TweetPhoto from '@components/TweetPhoto';
+import { ITweet } from 'types';
+import Link from 'next/link';
 
 interface GetTweetsResponse {
   ok: boolean;
@@ -33,7 +33,6 @@ interface TweetFormValue {
 const Main: NextPage = () => {
   const { mutate } = useSWRConfig();
   const { data } = useSWR<GetTweetsResponse>('/api/tweets');
-
   const { myProfile } = useMe();
   const { register, handleSubmit, reset, getValues, watch } =
     useForm<TweetFormValue>({
@@ -53,6 +52,22 @@ const Main: NextPage = () => {
     useMutation<UploadTweetResponse>('/api/tweets');
 
   const onValid = async ({ tweetText }: TweetFormValue) => {
+    uploadFunction(tweetText);
+  };
+  // Text Area Auth Height
+  const { ref, ...rest } = register('tweetText', {
+    required: 'Need to Write!',
+    maxLength: { value: 140, message: '140자까지만 작성 가능' },
+  });
+  const tweetTextAreaRef = useRef<HTMLTextAreaElement | null>(null);
+  const handleResizeHeight = useCallback(() => {
+    if (!tweetTextAreaRef.current) return;
+    tweetTextAreaRef.current.style.height = 'auto';
+    tweetTextAreaRef.current.style.height =
+      tweetTextAreaRef.current.scrollHeight + 'px';
+  }, [tweetTextAreaRef]);
+
+  async function uploadFunction(tweetText: string) {
     if (loading) return;
     mutate(
       '/api/tweets',
@@ -87,10 +102,10 @@ const Main: NextPage = () => {
           'Access-Control-Allow-Origin': '*',
         },
       });
-      const photoUrl = BUCKET_URL + objectName;
+      const photo = BUCKET_URL + objectName;
       uploadTweet({
         tweetText,
-        photo: photoUrl,
+        photo,
       });
     } else {
       uploadTweet({
@@ -99,23 +114,10 @@ const Main: NextPage = () => {
     }
     setUploadPhoto('');
     reset();
-  };
-  // Text Area Auth Height
-  const { ref, ...rest } = register('tweetText', {
-    required: 'Need to Write!',
-    maxLength: { value: 140, message: '140자까지만 작성 가능' },
-  });
-  const tweetTextAreaRef = useRef<HTMLTextAreaElement | null>(null);
-  const handleResizeHeight = useCallback(() => {
-    if (!tweetTextAreaRef.current) return;
-    tweetTextAreaRef.current.style.height = 'auto';
-    tweetTextAreaRef.current.style.height =
-      tweetTextAreaRef.current.scrollHeight + 'px';
-  }, [tweetTextAreaRef]);
-
+  }
   return (
     <Layout pageTitle='Home'>
-      <div className='divide-zinc-700 divide-y-[1px] p-1'>
+      <div className='divide-zinc-700 divide-y-[1px]'>
         <div className='min-h-[200px]'>
           <h1 className='font-bold text-xl p-5'>Home</h1>
           <form
@@ -126,19 +128,14 @@ const Main: NextPage = () => {
               {!myProfile?.avatar ? (
                 <div className='w-12 h-12 bg-slate-400 rounded-full' />
               ) : (
-                <Image
-                  width={50}
-                  height={50}
-                  src={myProfile?.avatar as string}
-                  className='w-12 h-12 bg-slate-400 rounded-full'
-                />
+                <Avatar url={myProfile?.avatar} />
               )}
             </div>
             <div className='w-full'>
               <div className='flex items-center mb-5'>
                 <textarea
                   {...rest}
-                  className='text-xl bg-transparent w-[95%] placeholder:text-zinc-500 resize-none p-2 ml-1'
+                  className='text-xl bg-transparent w-[95%] placeholder:text-zinc-500 resize-none py-2 px-4 ml-1 border-[1px] border-zinc-700 rounded-3xl'
                   placeholder='무슨 일이 일어나고 있나요?'
                   rows={1}
                   maxLength={140}
@@ -151,63 +148,12 @@ const Main: NextPage = () => {
                     if (e.code === 'Enter') {
                       e.preventDefault();
                       const tweetText = getValues('tweetText');
-                      if (loading) return;
-                      mutate(
-                        '/api/tweets',
-                        {
-                          ...data,
-                          tweets: [
-                            {
-                              tweetText,
-                              photo: uploadPhoto,
-                              user: {
-                                id: myProfile?.id,
-                                username: myProfile?.username,
-                                avatar: myProfile?.avatar,
-                              },
-                            },
-                            ...data?.tweets!,
-                          ],
-                        },
-                        false
-                      );
-                      if (fileWatch && fileWatch.length > 0) {
-                        const file = fileWatch[0];
-                        const {
-                          data: { url },
-                        } = await axios.post('/api/upload', {
-                          name: file.name,
-                          type: file.type,
-                        });
-                        await axios.put(url, file, {
-                          headers: {
-                            'Content-type': file.type,
-                            'Access-Control-Allow-Origin': '*',
-                          },
-                        });
-                        uploadTweet({
-                          tweetText,
-                          photo: url,
-                        });
-                      } else {
-                        uploadTweet({
-                          tweetText,
-                        });
-                      }
-                      setUploadPhoto('');
-                      reset();
+                      uploadFunction(tweetText);
                     }
                   }}
                 />
               </div>
-              {uploadPhoto !== '' ? (
-                <Image
-                  src={uploadPhoto}
-                  width={450}
-                  height={300}
-                  className='w-[90%] h-80 bg-blue-500 rounded-2xl'
-                />
-              ) : null}
+              {uploadPhoto !== '' ? <TweetPhoto url={uploadPhoto} /> : null}
               <div className='mt-1 w-full min-h-[50px] flex justify-between items-center '>
                 <div className='space-x-3 text-blue-500 flex'>
                   <label>
@@ -257,44 +203,16 @@ const Main: NextPage = () => {
           </form>
         </div>
         {/* Load All Tweets */}
-        <div className='divide-zinc-700 divide-y-[1px]'>
-          {data?.tweets.map((tweet, i) => (
-            <div key={i} className='grid grid-cols-[1fr_10fr] p-6 gap-4'>
-              <div>
-                {!tweet.user?.avatar ? (
-                  <div className='w-12 h-12 bg-slate-400 rounded-full' />
-                ) : (
-                  <Image
-                    width={50}
-                    height={50}
-                    src={tweet.user?.avatar}
-                    className='w-12 h-12 bg-slate-400 rounded-full'
-                  />
-                )}
-              </div>
-              <div className='flex flex-col space-y-2'>
-                <div className='flex items-center space-x-2'>
-                  <h4 className='font-bold text-lg'>@{tweet.user?.username}</h4>
-                  <span className='font-thin text-zinc-400 text-sm'>
-                    {tweet.createdAt
-                      ? String(tweet.createdAt)?.substring(0, 10)
-                      : 'Now'}
-                  </span>
-                </div>
-                <div className='mb-5'>
-                  <span className='text-md'>{tweet.tweetText}</span>
-                </div>
-                {tweet.photo ? (
-                  <Image
-                    width={450}
-                    height={300}
-                    src={tweet.photo}
-                    className='rounded-2xl'
-                  />
-                ) : null}
-              </div>
-            </div>
-          ))}
+        <div className='divide-zinc-700 divide-y-[1px] '>
+          {data &&
+            data.tweets &&
+            data.tweets.map((tweet, i) => (
+              <Link href={`/tweets/${tweet.id}`} key={i}>
+                <a>
+                  <TweetBox {...tweet} />
+                </a>
+              </Link>
+            ))}
         </div>
       </div>
     </Layout>

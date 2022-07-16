@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import useMutation from '@libs/client/useMutation';
-import AuthLayout from '@components/auth-layout';
+import AuthLayout from '@components/Auth-layout';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
@@ -76,7 +76,7 @@ const CreateAccount: NextPage = () => {
         <input
           className='w-3/5 px-5 py-2 rounded-full bg-blue-500 text-white cursor-pointer'
           type='submit'
-          value='로그인'
+          value={loading ? 'Loading...' : '가입하기'}
         />
       </form>
       <div className='w-full mt-10 space-y-5'>
