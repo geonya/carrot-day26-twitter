@@ -1,13 +1,13 @@
 import { Tweet } from '@prisma/client';
 import { NextPage } from 'next';
-import useSWR, { SWRConfig } from 'swr';
-import client from '@libs/server/client';
+import useSWR, { SWRConfig, useSWRConfig } from 'swr';
 import Layout from '@components/layout';
 import Image from 'next/image';
 import useMe from '@libs/client/useMe';
 import { useForm } from 'react-hook-form';
 import { useCallback, useRef } from 'react';
 import useMutation from '@libs/client/useMutation';
+import client from '@libs/server/client';
 
 interface GetTweetsResponse {
   ok: boolean;
@@ -24,15 +24,25 @@ interface TweetFormValue {
 }
 
 const Main: NextPage = () => {
+  const { mutate } = useSWRConfig();
   const { data } = useSWR<GetTweetsResponse>('/api/tweets');
   const { myProfile } = useMe();
   const { register, handleSubmit, reset } = useForm<TweetFormValue>({
     mode: 'onChange',
   });
   const [uploadTweet, { loading }] =
-    useMutation<UploadTweetResponse>('/api/tweets/write');
+    useMutation<UploadTweetResponse>('/api/tweets');
+
   const onValid = ({ tweetText }: TweetFormValue) => {
     if (loading) return;
+    mutate(
+      '/api/tweets',
+      {
+        ...data,
+        tweets: [...data?.tweets!, { tweetText }],
+      },
+      false
+    );
     uploadTweet({
       tweetText,
     });
@@ -151,12 +161,26 @@ const Page: NextPage<{ tweets: Tweet[] }> = ({ tweets }) => {
   );
 };
 
-export async function getServerSideProps() {
-  const tweets = await client.tweet.findMany({});
+// export async function getServerSideProps() {
+//   const tweets = await client.tweet.findMany({});
+//   return {
+//     props: {
+//       tweets: JSON.parse(JSON.stringify(tweets)),
+//     },
+//   };
+// }
+
+export async function getStaticProps() {
+  console.log('building statically');
+  const tweets = await client.tweet.findMany({
+    include: { user: true },
+    orderBy: { createdAt: 'desc' },
+  });
   return {
     props: {
       tweets: JSON.parse(JSON.stringify(tweets)),
     },
+    revalidate: 10,
   };
 }
 
