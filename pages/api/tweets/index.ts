@@ -23,7 +23,7 @@ async function handler(
   if (req.method === 'POST') {
     try {
       const {
-        body: { tweetText },
+        body: { tweetText, photo },
         session: { user },
       } = req;
       if (!user) {
@@ -32,6 +32,7 @@ async function handler(
       const tweet = await client.tweet.create({
         data: {
           tweetText,
+          ...(photo && { photo: photo }),
           user: {
             connect: {
               id: user.id,
