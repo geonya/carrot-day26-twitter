@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import AuthLayout from '@components/Auth-layout';
+import AuthLayout from '@components/AuthLayout';
 
 interface LoginFormValues {
   username: string;

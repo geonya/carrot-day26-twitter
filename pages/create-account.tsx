@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import useMutation from '@libs/client/useMutation';
-import AuthLayout from '@components/Auth-layout';
+import AuthLayout from '@components/AuthLayout';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
