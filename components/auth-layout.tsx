@@ -8,7 +8,11 @@ interface LayoutProps {
 export default function AuthLayout({ pageTitle, children }: LayoutProps) {
   return (
     <div className='text-white grid lg:grid-cols-[4fr_3fr] divide-zinc-700 divide-x-[1px]'>
-      <Head>{pageTitle ? `${pageTitle} | 당근 트위터` : '당근 트위터'}</Head>
+      <Head>
+        <title>
+          {pageTitle ? `${pageTitle} | 당근 트위터` : '당근 트위터'}
+        </title>
+      </Head>
       <div className='h-screen w-full flex justify-center items-start lg:order-2 min-w-[640px] shrink-0 flex-col p-12'>
         {children}
       </div>

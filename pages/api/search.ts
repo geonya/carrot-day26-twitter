@@ -62,7 +62,13 @@ async function handler(
         include: {
           user: true,
         },
+        orderBy: {
+          createdAt: 'desc',
+        },
       });
+      if (searchedTweets.length === 0) {
+        return res.json({ ok: false, error: 'Not found' });
+      }
       return res.json({ ok: true, searchedTweets });
     } catch (error) {
       console.error(error);

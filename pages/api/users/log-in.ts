@@ -14,6 +14,7 @@ async function handler(
       const {
         body: { username, password },
       } = req;
+      console.log(username, password);
       const user = await client.user.findUnique({ where: { username } });
       if (!user) {
         return res.json({ ok: false, error: 'User not found' });

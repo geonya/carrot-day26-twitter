@@ -12,11 +12,13 @@ interface SearchFormValue {
 
 interface GetSearchResponse {
   ok: boolean;
+  error?: string;
   searchedTweets: ITweet[];
 }
 
 const Search: NextPage = () => {
   const [tweets, setTweets] = useState<ITweet[] | null>(null);
+  const [error, setError] = useState('');
   const [searchMutate, { data }] =
     useMutation<GetSearchResponse>('/api/search');
   const { register, handleSubmit, reset } = useForm<SearchFormValue>();
@@ -25,10 +27,15 @@ const Search: NextPage = () => {
       keyword,
     });
     reset();
+    setError('');
+    setTweets(null);
   };
   useEffect(() => {
     if (data?.ok) {
       setTweets(data.searchedTweets);
+    }
+    if (data?.error) {
+      setError(data.error);
     }
   }, [data]);
   return (
@@ -48,7 +55,12 @@ const Search: NextPage = () => {
             />
           </form>
         </div>
-        <div className='divide-zinc-700 divide-y-[1px] '>
+        <div className='divide-zinc-700 divide-y-[1px]'>
+          {error !== '' ? (
+            <div className='w-full h-fu grid place-content-center py-52'>
+              <h1 className='text-bold text-3xl'>Not found</h1>
+            </div>
+          ) : null}
           {tweets && tweets.map((tweet, i) => <TweetBox key={i} {...tweet} />)}
         </div>
       </div>

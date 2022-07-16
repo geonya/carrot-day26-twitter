@@ -10,10 +10,9 @@ import client from '@libs/server/client';
 import axios from 'axios';
 import { BUCKET_URL } from 'constant';
 import TweetBox from '@components/TweetBox';
-import Avatar from '@components/Avatar';
 import TweetPhoto from '@components/TweetPhoto';
 import { ITweet } from 'types';
-import Link from 'next/link';
+import AvatarContainer from '@components/AvatarContainer';
 
 interface GetTweetsResponse {
   ok: boolean;
@@ -75,8 +74,12 @@ const Main: NextPage = () => {
         ...data,
         tweets: [
           {
+            id: data?.tweets?.length! + 1,
             tweetText,
             photo: uploadPhoto,
+            isLiked: false,
+            likeCount: 0,
+            commentCount: 0,
             user: {
               id: myProfile?.id,
               username: myProfile?.username,
@@ -125,11 +128,7 @@ const Main: NextPage = () => {
             onSubmit={handleSubmit(onValid)}
           >
             <div>
-              {!myProfile?.avatar ? (
-                <div className='w-12 h-12 bg-slate-400 rounded-full' />
-              ) : (
-                <Avatar url={myProfile?.avatar} />
-              )}
+              <AvatarContainer url={myProfile?.avatar} />
             </div>
             <div className='w-full'>
               <div className='flex items-center mb-5'>
@@ -178,7 +177,8 @@ const Main: NextPage = () => {
                       className='hidden'
                     />
                   </label>
-                  <svg
+                  {/* Emoji Button
+                   <svg
                     className='w-7 h-7 cursor-pointer'
                     fill='none'
                     stroke='currentColor'
@@ -191,7 +191,7 @@ const Main: NextPage = () => {
                       strokeWidth='2'
                       d='M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
                     ></path>
-                  </svg>
+                  </svg> */}
                 </div>
                 <input
                   className='bg-blue-500 px-3 py-1 rounded-full cursor-pointer'
@@ -206,13 +206,7 @@ const Main: NextPage = () => {
         <div className='divide-zinc-700 divide-y-[1px] '>
           {data &&
             data.tweets &&
-            data.tweets.map((tweet, i) => (
-              <Link href={`/tweets/${tweet.id}`} key={i}>
-                <a>
-                  <TweetBox {...tweet} />
-                </a>
-              </Link>
-            ))}
+            data.tweets.map((tweet, i) => <TweetBox {...tweet} key={i} />)}
         </div>
       </div>
     </Layout>

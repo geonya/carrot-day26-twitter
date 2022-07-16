@@ -1,5 +1,9 @@
+import useMe from '@libs/client/useMe';
+import useMutation from '@libs/client/useMutation';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 interface LayoutProps {
   pageTitle?: string;
@@ -7,6 +11,16 @@ interface LayoutProps {
 }
 
 export default function Layout({ pageTitle, children }: LayoutProps) {
+  const router = useRouter();
+  const myData = useMe();
+  const [logout, { data }] = useMutation(`/api/users/log-out`);
+
+  useEffect(() => {
+    if (data?.ok) {
+      router.push('/log-in');
+    }
+  }, [data]);
+
   return (
     <div className='text-zinc-200 grid sm:grid-cols-[1fr_1fr_1fr] divide-zinc-700 divide-x-[1px] '>
       <Head>
@@ -53,7 +67,7 @@ export default function Layout({ pageTitle, children }: LayoutProps) {
                 </li>
               </a>
             </Link>
-            <Link href={'/profile'}>
+            <Link href={`/users/${myData.myProfile?.username}`}>
               <a>
                 <li className='flex items-center space-x-3'>
                   <svg
@@ -74,13 +88,12 @@ export default function Layout({ pageTitle, children }: LayoutProps) {
                 </li>
               </a>
             </Link>
-            <Link href={'/'}>
-              <a>
-                <li className='px-7 py-2 bg-blue-500 text-whiter rounded-full text-center'>
-                  <span className='text-lg font-semibold'>Log Out</span>
-                </li>
-              </a>
-            </Link>
+            <li
+              className='w-30 py-2 bg-blue-500 rounded-full text-center cursor-pointer'
+              onClick={() => logout({})}
+            >
+              <span className='text-md font-semibold'>Log Out</span>
+            </li>
           </ul>
         </nav>
       </div>

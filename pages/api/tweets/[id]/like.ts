@@ -26,6 +26,19 @@ async function handler(
             id: existingLike.id,
           },
         });
+        const likeCount = await client.like.count({
+          where: {
+            tweetId: +id,
+          },
+        });
+        await client.tweet.update({
+          where: {
+            id: +id,
+          },
+          data: {
+            likeCount,
+          },
+        });
         return res.json({ ok: true });
       }
       await client.like.create({

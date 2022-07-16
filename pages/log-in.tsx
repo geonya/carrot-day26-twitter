@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import AuthLayout from '@components/Auth-layout';
 
-interface CreateAccountForm {
+interface LoginFormValues {
   username: string;
   password: string;
 }
@@ -18,13 +18,14 @@ const LogIn: NextPage = () => {
   const router = useRouter();
   const [loginMutation, { data, loading }] =
     useMutation<LoginResponse>('/api/users/log-in');
-  const { register, handleSubmit } = useForm<CreateAccountForm>({
+  const { register, handleSubmit } = useForm<LoginFormValues>({
     defaultValues: {
       username: router.query?.username ? (router.query.username as string) : '',
       password: router.query?.password ? (router.query.password as string) : '',
     },
+    mode: 'onChange',
   });
-  const onValid = (data: CreateAccountForm) => {
+  const onValid = (data: LoginFormValues) => {
     if (loading) return;
     loginMutation({
       ...data,
@@ -36,7 +37,7 @@ const LogIn: NextPage = () => {
     }
   }, [data, router]);
   return (
-    <AuthLayout pageTitle='Log In'>
+    <AuthLayout pageTitle='로그인'>
       <div className='space-y-14'>
         <div>
           <svg viewBox='0 0 24 24' className='fill-white w-14'>
@@ -64,7 +65,6 @@ const LogIn: NextPage = () => {
           className='w-3/5 px-5 py-2 rounded-full'
           type='password'
           {...register('password', { required: 'Please Write password' })}
-          name='Password'
           autoComplete='on'
         />
         <input
