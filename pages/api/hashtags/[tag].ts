@@ -14,11 +14,12 @@ async function handler(
         query: { tag },
         session: { user },
       } = req;
-      if (typeof tag !== 'string') return;
+      if (typeof tag !== 'string')
+        return res.json({ ok: false, error: 'wrong type tag' });
       if (!user) return res.json({ ok: false, error: 'not authrized' });
       const hashtag = await client.hashTag.findUnique({
         where: {
-          hashtag: tag,
+          tag,
         },
       });
       if (!hashtag)
