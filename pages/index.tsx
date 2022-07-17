@@ -25,15 +25,15 @@ interface UploadTweetResponse {
 }
 
 interface TweetFormValue {
-  file: FileList;
+  file?: FileList;
   tweetText: string;
 }
-
 const Main: NextPage = () => {
   const { mutate } = useSWRConfig();
   const { data } = useSWR<GetTweetsResponse>('/api/tweets');
+  console.log(data);
   const { myProfile } = useMe();
-  const { register, handleSubmit, reset, getValues, watch } =
+  const { register, handleSubmit, setValue, getValues, watch } =
     useForm<TweetFormValue>({
       mode: 'onChange',
     });
@@ -50,9 +50,13 @@ const Main: NextPage = () => {
   const [uploadTweet, { loading }] =
     useMutation<UploadTweetResponse>('/api/tweets');
 
-  const onValid = async ({ tweetText }: TweetFormValue) => {
-    uploadFunction(tweetText);
+  const onSubmitValid = async ({ tweetText }: TweetFormValue) => {
+    if (loading) return;
+    await uploadFunction(tweetText);
+    setValue('tweetText', '');
+    setUploadPhoto('');
   };
+
   // Text Area Auth Height
   const { ref, ...rest } = register('tweetText', {
     required: 'Need to Write!',
@@ -66,20 +70,20 @@ const Main: NextPage = () => {
       tweetTextAreaRef.current.scrollHeight + 'px';
   }, [tweetTextAreaRef]);
 
+  // tweet upload
   async function uploadFunction(tweetText: string) {
-    if (loading) return;
-    mutate(
+    const tweetLength = data?.tweets.length;
+    const newTweetId = tweetLength! + 1;
+    await mutate(
       '/api/tweets',
       {
         ...data,
         tweets: [
           {
-            id: data?.tweets?.length! + 1,
+            id: newTweetId,
             tweetText,
             photo: uploadPhoto,
-            isLiked: false,
             likeCount: 0,
-            commentCount: 0,
             user: {
               id: myProfile?.id,
               username: myProfile?.username,
@@ -88,6 +92,26 @@ const Main: NextPage = () => {
           },
           ...data?.tweets!,
         ],
+      },
+      false
+    );
+    await mutate(
+      `/api/tweets/${newTweetId}`,
+      {
+        ok: true,
+        isLiked: false,
+        tweet: {
+          id: newTweetId,
+          tweetText,
+          photo: uploadPhoto,
+
+          likeCount: 0,
+          user: {
+            id: myProfile?.id,
+            username: myProfile?.username,
+            avatar: myProfile?.avatar,
+          },
+        },
       },
       false
     );
@@ -115,8 +139,6 @@ const Main: NextPage = () => {
         tweetText,
       });
     }
-    setUploadPhoto('');
-    reset();
   }
   return (
     <Layout pageTitle='Home'>
@@ -125,7 +147,7 @@ const Main: NextPage = () => {
           <h1 className='font-bold text-xl p-5'>Home</h1>
           <form
             className='w-full grid grid-cols-[1fr_10fr] gap-4 p-6'
-            onSubmit={handleSubmit(onValid)}
+            onSubmit={handleSubmit(onSubmitValid)}
           >
             <div>
               <AvatarContainer url={myProfile?.avatar} />
@@ -147,7 +169,8 @@ const Main: NextPage = () => {
                     if (e.code === 'Enter') {
                       e.preventDefault();
                       const tweetText = getValues('tweetText');
-                      uploadFunction(tweetText);
+                      onSubmitValid({ tweetText });
+                      setValue('tweetText', '');
                     }
                   }}
                 />

@@ -90,4 +90,5 @@ const CreateAccount: NextPage = () => {
     </AuthLayout>
   );
 };
+
 export default CreateAccount;

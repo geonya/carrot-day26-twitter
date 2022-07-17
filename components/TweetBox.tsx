@@ -14,6 +14,7 @@ interface TweetProps {
   createdAt: Date;
   tweetText: string;
   photo?: string | null;
+  likeCount?: number;
 }
 interface GetTweetMutation {
   ok: boolean;
@@ -27,6 +28,7 @@ export default function TweetBox({
   createdAt,
   tweetText,
   photo,
+  likeCount,
 }: TweetProps) {
   const { mutate } = useSWRConfig();
   const { data, mutate: tweetMutate } = useSWR<GetTweetMutation>(
@@ -93,7 +95,7 @@ export default function TweetBox({
                 d='M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'
               ></path>
             </svg>
-            <span>1</span>
+            <span>{data?.tweet?.commentCount}</span>
           </li>
           <li
             className='flex space-x-2 items-center cursor-pointer'
@@ -113,8 +115,8 @@ export default function TweetBox({
                 d='M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'
               ></path>
             </svg>
+            <span>{data?.tweet?.likeCount || likeCount}</span>
           </li>
-          <span>{data?.tweet?.likeCount}</span>
         </ul>
       </div>
     </div>

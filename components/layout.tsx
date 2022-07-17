@@ -28,7 +28,7 @@ export default function Layout({ pageTitle, children }: LayoutProps) {
           {pageTitle ? `${pageTitle} | 당근 트위터` : '당근 트위터'}
         </title>
       </Head>
-      <div className='sm:block hidden shrink px-16'>
+      <div className='sm:block hidden  px-16'>
         <nav className='w-full flex justify-end items-center h-full'>
           <ul className='flex flex-col space-y-8'>
             <Link href={'/'}>
@@ -97,10 +97,8 @@ export default function Layout({ pageTitle, children }: LayoutProps) {
           </ul>
         </nav>
       </div>
-      <div className=' min-w-[640px] shrink-0 h-screen overflow-scroll'>
-        {children}
-      </div>
-      <div className='sm:block hidden shrink'></div>
+      <div className=' min-w-[375px] h-screen overflow-scroll'>{children}</div>
+      <div className='sm:block hidden '></div>
       <div></div>
     </div>
   );

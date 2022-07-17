@@ -18,3 +18,11 @@ When the Like button is pressed, save the like on the database and reflect the u
 Prisma is configured in the blueprint with SQLite.
 When you modify your prisma.schema run npm run db-sync.
 SWR and Tailwind are also configured in the blueprint.
+
+- [ ] like count bug fix cache data modify error
+- [ ] Tweet 작성창 모달창 만들기
+- [ ] 사진 확대 기능
+- [ ] Upload 시 like count NaN Bug Fix
+- [ ] 카테고리 섹션 만들기
+- [ ] 전체 폰트 spoqa 로 변경
+- [ ]
