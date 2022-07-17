@@ -18,7 +18,7 @@ async function handler(
       if (!user) return res.json({ ok: false, error: 'not authrized' });
       const hashtag = await client.hashTag.findUnique({
         where: {
-          hastag: tag,
+          hashtag: tag,
         },
       });
       if (!hashtag)
