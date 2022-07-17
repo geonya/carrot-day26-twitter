@@ -1,8 +1,6 @@
-import { Tweet } from '@prisma/client';
 import { NextPage } from 'next';
-import useSWR, { SWRConfig } from 'swr';
+import useSWR from 'swr';
 import Layout from '@components/Layout';
-import client from '@libs/server/client';
 import { GetTweetsResponse } from 'types';
 import WritingBox from '@components/WritingBox';
 import TweetsListContainer from '@components/TweetsListContainer';
@@ -23,22 +21,22 @@ const Main: NextPage = () => {
   );
 };
 
-const Page: NextPage<{ tweets: Tweet[] }> = ({ tweets }) => {
-  return (
-    <SWRConfig
-      value={{
-        fallback: {
-          '/api/tweets': {
-            ok: true,
-            tweets,
-          },
-        },
-      }}
-    >
-      <Main />
-    </SWRConfig>
-  );
-};
+// const Page: NextPage<{ tweets: Tweet[] }> = ({ tweets }) => {
+//   return (
+//     <SWRConfig
+//       value={{
+//         fallback: {
+//           '/api/tweets': {
+//             ok: true,
+//             tweets,
+//           },
+//         },
+//       }}
+//     >
+//       <Main />
+//     </SWRConfig>
+//   );
+// };
 
 // export async function getServerSideProps() {
 //   const tweets = await client.tweet.findMany({});
@@ -49,18 +47,18 @@ const Page: NextPage<{ tweets: Tweet[] }> = ({ tweets }) => {
 //   };
 // }
 
-export async function getStaticProps() {
-  console.log('building statically');
-  const tweets = await client.tweet.findMany({
-    include: { user: true },
-    orderBy: { createdAt: 'desc' },
-  });
-  return {
-    props: {
-      tweets: JSON.parse(JSON.stringify(tweets)),
-    },
-    revalidate: 10,
-  };
-}
+// export async function getStaticProps() {
+//   console.log('building statically');
+//   const tweets = await client.tweet.findMany({
+//     include: { user: true },
+//     orderBy: { createdAt: 'desc' },
+//   });
+//   return {
+//     props: {
+//       tweets: JSON.parse(JSON.stringify(tweets)),
+//     },
+//     revalidate: 10,
+//   };
+// }
 
-export default Page;
+export default Main;
