@@ -14,10 +14,11 @@ async function handler(
         query: { tag },
         session: { user },
       } = req;
+      const tagString = tag.toString();
       if (!user) return res.json({ ok: false, error: 'not authrized' });
       const hashtag = await client.hashTag.findUnique({
         where: {
-          tag: tag as string,
+          tag: tagString,
         },
       });
       if (!hashtag)
@@ -29,7 +30,7 @@ async function handler(
         where: {
           hashtags: {
             some: {
-              tag: tag as string,
+              tag: tagString,
             },
           },
         },
