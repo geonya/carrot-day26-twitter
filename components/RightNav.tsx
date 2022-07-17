@@ -24,7 +24,6 @@ export interface GetHashTagsResponse {
 
 export default function RightNav() {
   const { data } = useSWR<GetHashTagsResponse>('/api/hashtags');
-  console.log(data);
   return (
     <nav className='w-full flex justify-start items-center h-full px-5'>
       <motion.ul
