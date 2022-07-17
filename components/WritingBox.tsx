@@ -100,10 +100,10 @@ export default function WritingBox({ data, setWritingModal }: WritingBoxProps) {
           <AvatarContainer url={myProfile?.avatar} />
         </div>
         <div className='w-full'>
-          <div className='flex items-center mb-5'>
+          <div className='flex items-center mb-4'>
             <textarea
               {...rest}
-              className='text-xl bg-transparent w-[95%] placeholder:text-zinc-500 resize-none py-2 px-4 ml-1 border-[1px] border-zinc-700 rounded-3xl'
+              className='text-lg bg-transparent w-[95%] placeholder:text-zinc-500 resize-none py-2 px-4 ml-1 border-[1px] border-zinc-700 rounded-3xl'
               placeholder='무슨 일이 일어나고 있나요?'
               rows={1}
               maxLength={140}
@@ -123,11 +123,11 @@ export default function WritingBox({ data, setWritingModal }: WritingBoxProps) {
             />
           </div>
           {uploadPhoto !== '' ? <TweetPhoto url={uploadPhoto} /> : null}
-          <div className='mt-1 w-full min-h-[50px] flex justify-between items-center '>
-            <div className='space-x-3 text-blue-500 flex'>
+          <div className='mt-1 w-full min-h-[50px] flex justify-between items-center px-5'>
+            <div className='text-blue-500 flex'>
               <label>
                 <svg
-                  className='w-7 h-7 cursor-pointer'
+                  className='w-8 h-8 cursor-pointer'
                   fill='none'
                   stroke='currentColor'
                   viewBox='0 0 24 24'
@@ -164,7 +164,7 @@ export default function WritingBox({ data, setWritingModal }: WritingBoxProps) {
                   </svg> */}
             </div>
             <input
-              className='bg-blue-500 px-3 py-1 rounded-full cursor-pointer'
+              className='bg-blue-500 px-6 py-1.5 rounded-full cursor-pointer font-bold text-sm'
               type='submit'
               value='Tweet'
             />

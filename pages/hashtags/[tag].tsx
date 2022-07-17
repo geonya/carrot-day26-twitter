@@ -18,7 +18,10 @@ const HashTagPage: NextPage = () => {
   const { data } = useSWR<GetHastagResponse>(`/api/hashtags/${tag}`);
   return tag ? (
     <Layout pageTitle={tag}>
-      {data && data.tweets && <TweetsListContainer tweets={data.tweets} />}
+      <div className='min-h-[150px]'>
+        <h1 className='font-bold text-xl p-5'>#{tag}</h1>
+        {data && data.tweets && <TweetsListContainer tweets={data.tweets} />}
+      </div>
     </Layout>
   ) : (
     <NotFound />

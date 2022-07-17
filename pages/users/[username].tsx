@@ -155,6 +155,7 @@ export default function Profile() {
                     type='password'
                     {...register('password')}
                     placeholder='Password'
+                    autoComplete='on'
                   />
                 </>
               )}

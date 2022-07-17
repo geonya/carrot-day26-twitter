@@ -11,7 +11,7 @@ export function middleware(req: NextRequest) {
     }
     if (req.url.includes('/log-in') || req.url.includes('/create-account')) {
       if (req.cookies.tweetsession) {
-        return NextResponse.redirect(new URL('/', req.url));
+        return NextResponse.redirect(new URL('/log-in', req.url));
       }
     }
   }

@@ -50,7 +50,7 @@ const Search: NextPage = () => {
           >
             <input
               type='text'
-              className='text-xl bg-transparent w-[80%] placeholder:text-zinc-500 p-2 ml-1 border-[1px] border-zinc-700 rounded-full text-center'
+              className='text-lg bg-transparent w-[80%] placeholder:text-zinc-500 p-2 ml-1 border-[1px] border-zinc-700 rounded-full text-center'
               {...register('keyword', { required: '검색어를 입력해주세요.' })}
               placeholder='검색어를 입력해주세요'
             />

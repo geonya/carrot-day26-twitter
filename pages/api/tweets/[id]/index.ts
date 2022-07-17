@@ -16,7 +16,7 @@ async function handler(
       } = req;
       const tweet = await client.tweet.findUnique({
         where: {
-          id: parseInt(id.toString()),
+          id: +id.toString(),
         },
         include: {
           user: true,
@@ -26,7 +26,7 @@ async function handler(
         await client.like.findFirst({
           where: {
             userId: user?.id,
-            tweetId: parseInt(id.toString()),
+            tweetId: +id.toString(),
           },
         })
       );

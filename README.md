@@ -21,10 +21,14 @@ SWR and Tailwind are also configured in the blueprint.
 
 - [x] Wrting Box Refactoring
 - [x] Tweet 작성창 모달창 만들기
+  - [x] X 버튼 만들기
 - [x] 사진 확대 기능
 - [x] Upload 시 like count NaN Bug Fix
 - [x] hashtag 섹션 만들기
-- [ ] 전체 폰트 spoqa 로 변경
+- [x] 전체 폰트 spoqa 로 변경 CDN
+- [ ] db planet scale 로 연동하기
 - [ ] 이모지 모달 기능
-- [ ] framer 로 animation 만들기
-- [ ] 댓글 기능 도입
+- [x] framer 로 animation 만들기
+- [ ] Comment 기능
+- [ ] Edit 기능
+- [ ] log-out broken function fix

@@ -1,4 +1,9 @@
+import {
+  childrenVariants,
+  containerVariants,
+} from '@libs/client/animataionVariants';
 import { HashTag } from '@prisma/client';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import useSWR from 'swr';
 
@@ -16,22 +21,30 @@ interface GetHashTagsResponse {
 
 export default function RightNav() {
   const { data } = useSWR<GetHashTagsResponse>('/api/hashtags');
-  console.log(data);
+
   return (
-    <nav className='w-full flex justify-start items-center h-full'>
-      <ul className='flex flex-col items-center space-y-8 w-1/2'>
+    <nav className='w-full flex justify-start items-center h-full px-5'>
+      <motion.ul
+        className='space-y-5 w-1/2'
+        variants={containerVariants}
+        initial='start'
+        animate='end'
+      >
         {data &&
           data.hashtags &&
           data.hashtags.map((hashtag, i) => (
             <Link href={`/hashtags/${hashtag.tag}`} key={i}>
-              <li className='px-5 py-2 justify-center flex items-center space-x-3 cursor-pointer border border-transparent hover:border hover:border-zinc-700 hover:rounded-full'>
-                <span className='text-xl font-semibold'>
+              <motion.li
+                variants={childrenVariants}
+                className='w-[80%] py-2 justify-center text-center cursor-pointer border border-transparent hover:border hover:border-zinc-700 rounded-full'
+              >
+                <span className='lg:text-lg sm:text-md font-semibold'>
                   #{hashtag.tag} ({hashtag._count.tweets})
                 </span>
-              </li>
+              </motion.li>
             </Link>
           ))}
-      </ul>
+      </motion.ul>
     </nav>
   );
 }

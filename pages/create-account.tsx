@@ -72,6 +72,7 @@ const CreateAccount: NextPage = () => {
           type='password'
           {...register('password', { required: 'Please Write password' })}
           placeholder='Password'
+          autoComplete='on'
         />
         <input
           className='w-3/5 px-5 py-2 rounded-full bg-blue-500 text-white cursor-pointer'

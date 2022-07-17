@@ -9,7 +9,7 @@ async function handler(
 ) {
   if (req.method === 'POST') {
     try {
-      req.session.destroy();
+      await req.session.destroy();
       return res.json({ ok: true });
     } catch (error) {
       console.error(error);

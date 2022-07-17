@@ -56,7 +56,7 @@ export default function TweetBox({
   return (
     <motion.div className='grid grid-cols-[1fr_10fr] p-6 gap-4'>
       <Link href={`/users/${user?.username}`}>
-        <div>
+        <div className='cursor-pointer'>
           <AvatarContainer url={user?.avatar} />
         </div>
       </Link>
