@@ -1,14 +1,23 @@
+import { motion } from 'framer-motion';
 import AvatarContainer from '@components/AvatarContainer';
 import TweetPhoto from '@components/TweetPhoto';
 import uploadFunction from '@libs/client/uploadFunction';
 import useMe from '@libs/client/useMe';
 import useMutation from '@libs/client/useMutation';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  type Dispatch,
+  type SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useForm } from 'react-hook-form';
 import { GetTweetsResponse, ITweet, TweetFormValue } from 'types';
 
 interface WritingBoxProps {
-  data: GetTweetsResponse;
+  data?: GetTweetsResponse;
+  setWringBoxModal?: Dispatch<SetStateAction<boolean>>;
 }
 
 interface UploadTweetResponse {
@@ -17,7 +26,10 @@ interface UploadTweetResponse {
   tweet?: ITweet;
 }
 
-export default function WritingBox({ data }: WritingBoxProps) {
+export default function WritingBox({
+  data,
+  setWringBoxModal,
+}: WritingBoxProps) {
   const { myProfile } = useMe();
   const { register, handleSubmit, setValue, watch, getValues } =
     useForm<TweetFormValue>({
@@ -30,21 +42,26 @@ export default function WritingBox({ data }: WritingBoxProps) {
   const fileWatch = watch('file');
   const onSubmitValid = async ({ tweetText }: TweetFormValue) => {
     if (loading) return;
+    if (!data || !data.tweets) return;
+    if (!myProfile) return;
     // new tweet obj
     const newTweetObj = {
-      id: data?.tweets.length + 1,
+      id: data.tweets.length + 1,
       tweetText,
       photo: uploadPhoto,
       likeCount: 0,
       user: {
-        id: myProfile?.id,
-        username: myProfile?.username,
-        avatar: myProfile?.avatar,
+        id: myProfile.id,
+        username: myProfile.username,
+        avatar: myProfile.avatar,
       },
     };
     await uploadFunction({ data, newTweetObj, uploadTweet, fileWatch });
     setValue('tweetText', '');
     setUploadPhoto('');
+    if (setWringBoxModal) {
+      setWringBoxModal(false);
+    }
   };
   useEffect(() => {
     if (fileWatch && fileWatch.length > 0) {
@@ -67,7 +84,16 @@ export default function WritingBox({ data }: WritingBoxProps) {
   }, [tweetTextAreaRef]);
 
   return (
-    <div>
+    <motion.div
+      className='w-full h-full'
+      initial={{ scale: 0, opacity: 0 }}
+      animate={{
+        scale: 1,
+        opacity: 1,
+        transition: { type: 'tween' },
+      }}
+      exit={{ scale: 0, opacity: 0 }}
+    >
       <form
         className='w-full grid grid-cols-[1fr_10fr] gap-4 p-6'
         onSubmit={handleSubmit(onSubmitValid)}
@@ -147,6 +173,6 @@ export default function WritingBox({ data }: WritingBoxProps) {
           </div>
         </div>
       </form>
-    </div>
+    </motion.div>
   );
 }

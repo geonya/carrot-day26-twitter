@@ -4,6 +4,7 @@ import useMutation from '@libs/client/useMutation';
 import { Tweet } from '@prisma/client';
 import Link from 'next/link';
 import useSWR, { useSWRConfig } from 'swr';
+import { motion } from 'framer-motion';
 
 interface TweetProps {
   id: number;
@@ -53,7 +54,7 @@ export default function TweetBox({
   };
 
   return (
-    <div className='grid grid-cols-[1fr_10fr] p-6 gap-4'>
+    <motion.div className='grid grid-cols-[1fr_10fr] p-6 gap-4'>
       <Link href={`/users/${user?.username}`}>
         <div>
           <AvatarContainer url={user?.avatar} />
@@ -119,6 +120,6 @@ export default function TweetBox({
           </li>
         </ul>
       </div>
-    </div>
+    </motion.div>
   );
 }

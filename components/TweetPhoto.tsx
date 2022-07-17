@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 interface TweetPhotoProps {
   url: string;
@@ -6,14 +7,19 @@ interface TweetPhotoProps {
 
 export default function TweetPhoto({ url }: TweetPhotoProps) {
   return (
-    <div className='w-full flex justify-center items-center rounded-lg overflow-hidden'>
+    <motion.div
+      className='w-full flex justify-center items-center rounded-lg z-50'
+      initial={{ scale: 1 }}
+      whileHover={{ scale: 1.2, transition: { type: 'tween' } }}
+      exit={{ scale: 1 }}
+    >
       <Image
         className='rounded-2xl cursor-pointer object-cover'
-        width={450}
-        height={300}
+        width={360}
+        height={240}
         alt={url}
         src={url}
       />
-    </div>
+    </motion.div>
   );
 }
