@@ -143,7 +143,7 @@ export default function Profile() {
                 />
               </label>
               <input
-                className='text-md w-3/5 placeholder:text-zinc-500 p-2 ml-1 border-[1px] border-zinc-700 rounded-3xl text-center'
+                className='text-base w-3/5 placeholder:text-zinc-500 p-2 ml-1 border-[1px] border-zinc-700 rounded-3xl text-center'
                 type='text'
                 placeholder={data.user.email}
                 disabled
@@ -151,7 +151,7 @@ export default function Profile() {
               {isMe && (
                 <>
                   <input
-                    className='text-md bg-transparent w-3/5 placeholder:text-zinc-500 p-2 ml-1 border-[1px] border-zinc-700 rounded-3xl text-center'
+                    className='text-base bg-transparent w-3/5 placeholder:text-zinc-500 p-2 ml-1 border-[1px] border-zinc-700 rounded-3xl text-center'
                     type='password'
                     {...register('password')}
                     placeholder='Password'
@@ -160,7 +160,7 @@ export default function Profile() {
                 </>
               )}
               <textarea
-                className={`text-md bg-transparent w-3/5 placeholder:text-zinc-500 p-3 ml-1 ${
+                className={`text-base bg-transparent w-3/5 placeholder:text-zinc-500 p-3 ml-1 ${
                   isMe ? 'border-[1px] border-zinc-700' : null
                 } rounded-2xl resize-none`}
                 rows={3}

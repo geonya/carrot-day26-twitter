@@ -2,18 +2,21 @@ import {
   childrenVariants,
   containerVariants,
 } from '@libs/client/animataionVariants';
-import { HashTag } from '@prisma/client';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import useSWR from 'swr';
 
-interface IHashTag extends HashTag {
+interface IHashTag {
+  id: number;
+  tag: string;
+  createdAt: Date;
+  updatedAt: Date;
   _count: {
     tweets: number;
   };
 }
 
-interface GetHashTagsResponse {
+export interface GetHashTagsResponse {
   ok: boolean;
   error?: string;
   hashtags?: IHashTag[];
@@ -21,7 +24,7 @@ interface GetHashTagsResponse {
 
 export default function RightNav() {
   const { data } = useSWR<GetHashTagsResponse>('/api/hashtags');
-
+  console.log(data);
   return (
     <nav className='w-full flex justify-start items-center h-full px-5'>
       <motion.ul
@@ -38,8 +41,8 @@ export default function RightNav() {
                 variants={childrenVariants}
                 className='w-[80%] py-2 justify-center text-center cursor-pointer border border-transparent hover:border hover:border-zinc-700 rounded-full'
               >
-                <span className='lg:text-lg sm:text-md font-semibold'>
-                  #{hashtag.tag} ({hashtag._count.tweets})
+                <span className='lg:text-base md:text-sm text-sm font-semibold'>
+                  #{hashtag.tag} ({hashtag._count?.tweets})
                 </span>
               </motion.li>
             </Link>

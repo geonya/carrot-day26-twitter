@@ -1,10 +1,12 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
 }
 
 model User {
@@ -35,6 +37,8 @@ model Tweet {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   like         Like[]
+
+  @@index([userId])
 }
 
 model HashTag {
@@ -53,4 +57,7 @@ model Like {
   userId    Int
   tweet     Tweet    @relation(fields: [tweetId], references: [id])
   tweetId   Int
+
+  @@index([userId])
+  @@index([tweetId])
 }

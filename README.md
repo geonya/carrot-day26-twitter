@@ -26,9 +26,9 @@ SWR and Tailwind are also configured in the blueprint.
 - [x] Upload 시 like count NaN Bug Fix
 - [x] hashtag 섹션 만들기
 - [x] 전체 폰트 spoqa 로 변경 CDN
+- [ ] tweet 작성시 hashtag 도 mutation
 - [ ] db planet scale 로 연동하기
-- [ ] 이모지 모달 기능
 - [x] framer 로 animation 만들기
 - [ ] Comment 기능
 - [ ] Edit 기능
-- [ ] log-out broken function fix
+- [x] log-out broken function fix : route error fix

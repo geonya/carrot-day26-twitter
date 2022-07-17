@@ -63,18 +63,18 @@ export default function TweetBox({
       <div className='flex flex-col'>
         <div className='flex items-center justify-between mb-4'>
           <Link href={`/users/${user?.username}`}>
-            <h4 className='font-bold text-lg cursor-pointer'>
+            <h4 className='font-bold text-base cursor-pointer'>
               @{user?.username}
             </h4>
           </Link>
-          <span className='font-thin text-zinc-400 text-sm'>
+          <span className='font-thin text-zinc-400 text-xs'>
             {createdAt ? String(createdAt)?.substring(0, 10) : 'Now'}
           </span>
         </div>
         <Link href={`/tweets/${id}`}>
           <a>
             <div className='mb-5'>
-              <span className='text-lg'>{tweetText}</span>
+              <span className='text-base'>{tweetText}</span>
             </div>
             {photo ? <TweetPhoto url={photo} /> : null}
           </a>

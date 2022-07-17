@@ -1,3 +1,5 @@
+import { GetHashTagsResponse } from '@components/RightNav';
+import { makeHashtagArrays } from '@libs/client/makeHashtags';
 import axios from 'axios';
 import { BUCKET_URL } from 'constant';
 import { mutate } from 'swr';
@@ -42,6 +44,20 @@ export default async function uploadFunction({
       isLiked: false,
       tweet: newTweetObj,
     },
+    false
+  );
+  const hashtags = makeHashtagArrays(newTweetObj.tweetText).map((hashtag) => ({
+    tag: hashtag,
+    _count: {
+      tweets: 1,
+    },
+  }));
+  await mutate(
+    `/api/hashtags`,
+    (prev: GetHashTagsResponse) => ({
+      ...prev,
+      hashtags: [...hashtags, ...prev?.hashtags!],
+    }),
     false
   );
   if (fileWatch && fileWatch.length > 0) {

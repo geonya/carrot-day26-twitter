@@ -103,7 +103,7 @@ export default function WritingBox({ data, setWritingModal }: WritingBoxProps) {
           <div className='flex items-center mb-4'>
             <textarea
               {...rest}
-              className='text-lg bg-transparent w-[95%] placeholder:text-zinc-500 resize-none py-2 px-4 ml-1 border-[1px] border-zinc-700 rounded-3xl'
+              className='text-base bg-transparent w-[95%] placeholder:text-zinc-500 resize-none py-2 px-4 ml-1 border-[1px] border-zinc-700 rounded-3xl'
               placeholder='무슨 일이 일어나고 있나요?'
               rows={1}
               maxLength={140}

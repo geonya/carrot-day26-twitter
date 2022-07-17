@@ -1,6 +1,6 @@
 import Layout from '@components/Layout';
 import NotFound from '@components/NotFound';
-import TweetBox from '@components/TweetBox';
+import TweetsListContainer from '@components/TweetsListContainer';
 import useMutation from '@libs/client/useMutation';
 import { NextPage } from 'next';
 import { useEffect, useState } from 'react';
@@ -41,7 +41,7 @@ const Search: NextPage = () => {
   }, [data]);
   return (
     <Layout pageTitle='Search'>
-      <div className='divide-zinc-700 divide-y-[1px]'>
+      <div className=''>
         <div className='min-h-[150px]'>
           <h1 className='font-bold text-xl p-5'>Search</h1>
           <form
@@ -50,7 +50,7 @@ const Search: NextPage = () => {
           >
             <input
               type='text'
-              className='text-lg bg-transparent w-[80%] placeholder:text-zinc-500 p-2 ml-1 border-[1px] border-zinc-700 rounded-full text-center'
+              className='text-base bg-transparent w-[80%] placeholder:text-zinc-500 p-2 ml-1 border-[1px] border-zinc-700 rounded-full text-center'
               {...register('keyword', { required: '검색어를 입력해주세요.' })}
               placeholder='검색어를 입력해주세요'
             />
@@ -58,7 +58,7 @@ const Search: NextPage = () => {
         </div>
         <div className='divide-zinc-700 divide-y-[1px]'>
           {error !== '' ? <NotFound /> : null}
-          {tweets && tweets.map((tweet, i) => <TweetBox key={i} {...tweet} />)}
+          {tweets && <TweetsListContainer tweets={tweets} />}
         </div>
       </div>
     </Layout>
