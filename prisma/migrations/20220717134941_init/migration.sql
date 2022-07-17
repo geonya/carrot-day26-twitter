@@ -27,11 +27,9 @@ CREATE TABLE "Tweet" (
 -- CreateTable
 CREATE TABLE "HashTag" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "hashtag" TEXT NOT NULL,
-    "tweetId" INTEGER,
+    "tag" TEXT NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
-    CONSTRAINT "HashTag_tweetId_fkey" FOREIGN KEY ("tweetId") REFERENCES "Tweet" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    "updatedAt" DATETIME NOT NULL
 );
 
 -- CreateTable
@@ -53,6 +51,14 @@ CREATE TABLE "_FollowRelation" (
     CONSTRAINT "_FollowRelation_B_fkey" FOREIGN KEY ("B") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+-- CreateTable
+CREATE TABLE "_HashTagToTweet" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL,
+    CONSTRAINT "_HashTagToTweet_A_fkey" FOREIGN KEY ("A") REFERENCES "HashTag" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "_HashTagToTweet_B_fkey" FOREIGN KEY ("B") REFERENCES "Tweet" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
@@ -60,10 +66,16 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "HashTag_hashtag_key" ON "HashTag"("hashtag");
+CREATE UNIQUE INDEX "HashTag_tag_key" ON "HashTag"("tag");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_FollowRelation_AB_unique" ON "_FollowRelation"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_FollowRelation_B_index" ON "_FollowRelation"("B");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_HashTagToTweet_AB_unique" ON "_HashTagToTweet"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_HashTagToTweet_B_index" ON "_HashTagToTweet"("B");

@@ -39,9 +39,8 @@ model Tweet {
 
 model HashTag {
   id        Int      @id @default(autoincrement())
-  hashtag   String   @unique
-  tweet     Tweet?   @relation(fields: [tweetId], references: [id])
-  tweetId   Int?
+  tag       String   @unique
+  tweets    Tweet[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

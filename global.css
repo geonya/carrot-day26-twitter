@@ -3,5 +3,6 @@
 @tailwind utilities;
 
 body {
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
   background-color: black;
 }

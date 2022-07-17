@@ -3,6 +3,7 @@ import { MutationResponseType } from 'types';
 import client from '@libs/server/client';
 import { withApiSession } from '@libs/server/withSession';
 import withHandler from '@libs/server/withHandler';
+import { makeHashtags } from '@libs/client/makeHashtags';
 
 async function handler(
   req: NextApiRequest,
@@ -29,6 +30,7 @@ async function handler(
       if (!user) {
         return res.json({ ok: false, error: 'Not authorized' });
       }
+      const hashTagObjs = makeHashtags(tweetText);
       const tweet = await client.tweet.create({
         data: {
           tweetText,
@@ -38,6 +40,11 @@ async function handler(
               id: user.id,
             },
           },
+          ...(hashTagObjs.length > 0 && {
+            hashtags: {
+              connectOrCreate: hashTagObjs,
+            },
+          }),
         },
       });
       return res.json({ ok: true, tweet });

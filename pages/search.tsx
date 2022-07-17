@@ -1,4 +1,5 @@
 import Layout from '@components/Layout';
+import NotFound from '@components/NotFound';
 import TweetBox from '@components/TweetBox';
 import useMutation from '@libs/client/useMutation';
 import { NextPage } from 'next';
@@ -56,11 +57,7 @@ const Search: NextPage = () => {
           </form>
         </div>
         <div className='divide-zinc-700 divide-y-[1px]'>
-          {error !== '' ? (
-            <div className='w-full h-fu grid place-content-center py-52'>
-              <h1 className='text-bold text-3xl'>Not found</h1>
-            </div>
-          ) : null}
+          {error !== '' ? <NotFound /> : null}
           {tweets && tweets.map((tweet, i) => <TweetBox key={i} {...tweet} />)}
         </div>
       </div>

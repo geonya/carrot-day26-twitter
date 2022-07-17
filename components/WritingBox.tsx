@@ -17,7 +17,7 @@ import { GetTweetsResponse, ITweet, TweetFormValue } from 'types';
 
 interface WritingBoxProps {
   data?: GetTweetsResponse;
-  setWringBoxModal?: Dispatch<SetStateAction<boolean>>;
+  setWritingModal?: Dispatch<SetStateAction<boolean>>;
 }
 
 interface UploadTweetResponse {
@@ -26,10 +26,7 @@ interface UploadTweetResponse {
   tweet?: ITweet;
 }
 
-export default function WritingBox({
-  data,
-  setWringBoxModal,
-}: WritingBoxProps) {
+export default function WritingBox({ data, setWritingModal }: WritingBoxProps) {
   const { myProfile } = useMe();
   const { register, handleSubmit, setValue, watch, getValues } =
     useForm<TweetFormValue>({
@@ -40,6 +37,7 @@ export default function WritingBox({
     useMutation<UploadTweetResponse>('/api/tweets');
 
   const fileWatch = watch('file');
+
   const onSubmitValid = async ({ tweetText }: TweetFormValue) => {
     if (loading) return;
     if (!data || !data.tweets) return;
@@ -59,8 +57,8 @@ export default function WritingBox({
     await uploadFunction({ data, newTweetObj, uploadTweet, fileWatch });
     setValue('tweetText', '');
     setUploadPhoto('');
-    if (setWringBoxModal) {
-      setWringBoxModal(false);
+    if (setWritingModal) {
+      setWritingModal(false);
     }
   };
   useEffect(() => {
@@ -70,7 +68,7 @@ export default function WritingBox({
     }
   }, [fileWatch]);
 
-  // Text Area Auth Height
+  // Text Area Auto Height Set
   const { ref, ...rest } = register('tweetText', {
     required: 'Need to Write!',
     maxLength: { value: 140, message: '140자까지만 작성 가능' },

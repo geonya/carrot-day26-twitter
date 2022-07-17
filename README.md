@@ -23,7 +23,7 @@ SWR and Tailwind are also configured in the blueprint.
 - [x] Tweet 작성창 모달창 만들기
 - [x] 사진 확대 기능
 - [x] Upload 시 like count NaN Bug Fix
-- [ ] 카테고리 섹션 만들기
+- [x] hashtag 섹션 만들기
 - [ ] 전체 폰트 spoqa 로 변경
 - [ ] 이모지 모달 기능
 - [ ] framer 로 animation 만들기

@@ -3,62 +3,21 @@ import { NextPage } from 'next';
 import useSWR, { SWRConfig } from 'swr';
 import Layout from '@components/Layout';
 import client from '@libs/server/client';
-import TweetBox from '@components/TweetBox';
 import { GetTweetsResponse } from 'types';
 import WritingBox from '@components/WritingBox';
-import { motion, type Variants } from 'framer-motion';
+import TweetsListContainer from '@components/TweetsListContainer';
 
 const Main: NextPage = () => {
   const { data } = useSWR<GetTweetsResponse>('/api/tweets');
-
-  const containerVariants: Variants = {
-    start: {
-      opacity: 0,
-      scale: 0,
-    },
-    end: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        type: 'tween',
-        duration: 0.5,
-        delayChildren: 0.5,
-        staggerChildren: 0.5,
-      },
-    },
-  };
-  const tweetVariants: Variants = {
-    start: {
-      opacity: 0,
-      y: 30,
-    },
-    end: {
-      opacity: 1,
-      y: 0,
-    },
-  };
   return (
-    <Layout pageTitle='Home' data={data}>
+    <Layout pageTitle='Home'>
       <div className='divide-zinc-700 divide-y-[1px]'>
         <div className='min-h-[200px]'>
           <h1 className='font-bold text-xl p-5'>Home</h1>
           {data && <WritingBox data={data} />}
         </div>
         {/* Load All Tweets */}
-        <motion.div
-          className='divide-zinc-700 divide-y-[1px]'
-          variants={containerVariants}
-          initial='start'
-          animate='end'
-        >
-          {data &&
-            data.tweets &&
-            data.tweets.map((tweet, i) => (
-              <motion.div key={i} variants={tweetVariants}>
-                <TweetBox {...tweet} />
-              </motion.div>
-            ))}
-        </motion.div>
+        {data && <TweetsListContainer tweets={data.tweets} />}
       </div>
     </Layout>
   );
