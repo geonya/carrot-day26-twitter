@@ -15,7 +15,7 @@ async function handler(
         session: { user },
       } = req;
       if (!user) return res.json({ ok: false, error: 'not authrized' });
-      const hashtag = await client.hashTag.findUnique({
+      const hashtag = await client.hashTag.findFirst({
         where: {
           tag: tag as string,
         },
