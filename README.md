@@ -19,10 +19,12 @@ Prisma is configured in the blueprint with SQLite.
 When you modify your prisma.schema run npm run db-sync.
 SWR and Tailwind are also configured in the blueprint.
 
-- [ ] like count bug fix cache data modify error
+- [x] like count bug fix cache data modify error
 - [ ] Tweet 작성창 모달창 만들기
 - [ ] 사진 확대 기능
 - [ ] Upload 시 like count NaN Bug Fix
 - [ ] 카테고리 섹션 만들기
 - [ ] 전체 폰트 spoqa 로 변경
-- [ ]
+- [ ] 이모지 모달 기능
+- [ ] framer 로 animation 만들기
+- [ ] 댓글 기능 도입
